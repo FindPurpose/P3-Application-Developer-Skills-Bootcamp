@@ -10,3 +10,8 @@ class ClubListCmd(BaseCommand):
     def execute(self):
         cm = ClubManager()
         return Context("main-menu", clubs=cm.clubs)
+
+
+"""
+add something similar to this but for tournament
+"""

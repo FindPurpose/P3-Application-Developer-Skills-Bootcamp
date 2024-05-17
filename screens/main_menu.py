@@ -2,6 +2,10 @@ from commands import ExitCmd, NoopCmd
 
 from .base_screen import BaseScreen
 
+"""
+start with PROGRAM FLOW AND FEATURES
+Start modifying this"""
+
 
 class MainMenu(BaseScreen):
     """Main menu screen"""
@@ -16,6 +20,7 @@ class MainMenu(BaseScreen):
     def get_command(self):
         while True:
             print("Type C to create a club or a club number to view/edit it.")
+            print("Type V to view/manage tournament")
             print("Type X to exit.")
             value = self.input_string()
             if value.isdigit():
@@ -24,5 +29,7 @@ class MainMenu(BaseScreen):
                     return NoopCmd("club-view", club=self.clubs[value - 1])
             elif value.upper() == "C":
                 return NoopCmd("club-create")
+            elif value.upper() == "V":
+                return NoopCmd("tournament-view") #Have to add tournament info
             elif value.upper() == "X":
                 return ExitCmd()
