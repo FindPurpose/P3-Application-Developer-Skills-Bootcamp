@@ -1,7 +1,5 @@
-from commands import ClubListCmd
+from commands import ClubListCmd, TournamentListCmd
 from screens import ClubCreate, ClubView, MainMenu, PlayerEdit, PlayerView, TournamentView
-
-
 
 class App:
     """The main controller for the club management program"""
@@ -35,7 +33,6 @@ class App:
                 # Ctrl-C
                 print("Bye!")
                 self.context.run = False
-
 
 if __name__ == "__main__":
     app = App()

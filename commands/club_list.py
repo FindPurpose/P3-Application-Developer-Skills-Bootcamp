@@ -11,7 +11,3 @@ class ClubListCmd(BaseCommand):
         cm = ClubManager()
         return Context("main-menu", clubs=cm.clubs)
 
-
-"""
-add something similar to this but for tournament
-"""

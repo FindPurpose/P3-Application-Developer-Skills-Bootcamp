@@ -1,6 +1,45 @@
+import json
+from datetime import datetime
+from pathlib import Path
+
+class Tournament:
+    def __init__(self, name, start_date, end_date, venue, number_of_rounds, filepath=None):
+        self.name = name
+        self.start_date = start_date
+        self.end_date = end_date
+        self.venue = venue
+        self.number_of_rounds = number_of_rounds
+        self.current_round = None
+        self.completed = False
+        self.players = []
+        self.rounds = []
+        self.filepath = filepath
+
+    def save(self):
+        data = {
+            "name": self.name,
+            "dates": {
+                "from": self.start_date.strftime("%d-%m-%Y"),
+                "to": self.end_date.strftime("%d-%m-%Y"),
+            },
+            "venue": self.venue,
+            "number_of_rounds": self.number_of_rounds,
+            "current_round": self.current_round,
+            "completed": self.completed,
+            "players": self.players,
+            "rounds": [[{
+                "players": match.players,
+                "completed": match.completed,
+                "winner": match.winner
+            } for match in round.matches] for round in self.rounds]
+        }
+
+        with open(self.filepath, 'w') as file:
+            json.dump(data, file, indent=4)
+
 """
 Get the tournament and put all of those into a placeholder.
-"""
+
 import json
 from .player import Player
 from .round import Round
@@ -13,10 +52,10 @@ import random
 
 class Tournament:
     def __init__(self, filepath=None, name=None):
-        """The constructor works in two ways:
+        The constructor works in two ways:
         - if the filepath is provided, it loads data from JSON
         - if it is not but a name is provided, it creates a new tournament (and a new JSON file)
-        """
+        
         self.name = name
         self.filepath = filepath
         self.start_date = None
@@ -79,7 +118,7 @@ class Tournament:
         return False
 
     def save(self):
-        """Save the tournament data to a JSON file."""
+        Save the tournament data to a JSON file.
         data = {
             "name": self.name,
             "dates": {
@@ -99,3 +138,4 @@ class Tournament:
         with open(f"data/tournaments/{self.name.replace(' ', '_')}.json", 'w') as fp:
             json.dump(data, fp, indent=4)
     
+"""

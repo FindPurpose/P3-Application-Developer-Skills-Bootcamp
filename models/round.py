@@ -13,3 +13,8 @@ class Round:
 
     def __repr__(self):
         return f"Round(matches={self.matches})"
+
+    @classmethod
+    def deserialize(cls, data):
+        matches = [Match.deserialize(match_data) for match_data in data]
+        return cls(matches=matches)

@@ -1,90 +1,32 @@
-from commands import ClubListCmd, NoopCmd
-
 from ..base_screen import BaseScreen
-from models import Tournament 
-
+from commands import NoopCmd,ExitCmd
 
 class TournamentView(BaseScreen):
-    """Screen displayed when viewing a club"""
+    """Tournament view screen"""
 
-    def __init__(self, tournament):
-        self.tournament = tournament
+    def __init__(self, tournaments):
+        self.tournaments = tournaments
 
-    def display_tournament_info(tournament: Tournament):
-        print(f"Tournament: {tournament.name}")
-        print(f"Dates: {tournament.start_date.strftime('%d-%m-%Y')} to {tournament.end_date.strftime('%d-%m-%Y')}")
-        print(f"Venue: {tournament.venue}")
-        print(f"Rounds: {tournament.number_of_rounds}")
-        print(f"Current Round: {tournament.current_round if tournament.current_round else 'None'}")
-        print(f"Completed: {'Yes' if tournament.completed else 'No'}")
-        print("Players:")
-        for player_id in tournament.players:
-            print(f" - {player_id}")
+    def display(self):
+        if not self.tournaments:
+            print("No ongoing tournaments.")
+            return
+
+        print("List of Ongoing Tournaments:")
+        for idx, tournament in enumerate(self.tournaments, 1):
+            print(f"{idx}. {tournament.name} ({tournament.start_date.strftime('%d-%m-%Y')} to {tournament.end_date.strftime('%d-%m-%Y')})")
 
     def get_command(self):
-        """Gets the command for this screen"""
-        while True:
-            print("Select a player to view/edit it, or 'C' to create a new player.")
-            print("Type 'B' to go back to main menu.")
-            value = self.input_string()
-            if value.upper() == "B":
-                return ClubListCmd()
-            elif value.upper() == "C":
-                return NoopCmd("player-create", club=self.club)
-            elif value.isdigit():
-                value = int(value)
-                return NoopCmd(
-                    "player-view", club=self.club, player=self.club.players[value - 1]
-                )
+        if not self.tournaments:
+            print("Press Enter to return to the main menu.")
+            self.input_string()
+            return NoopCmd("main-menu")
 
-"""def display_tournament_info(tournament: Tournament):
-        print(f"Tournament: {tournament.name}")
-        print(f"Dates: {tournament.start_date.strftime('%d-%m-%Y')} to {tournament.end_date.strftime('%d-%m-%Y')}")
-        print(f"Venue: {tournament.venue}")
-        print(f"Rounds: {tournament.number_of_rounds}")
-        print(f"Current Round: {tournament.current_round if tournament.current_round else 'None'}")
-        print(f"Completed: {'Yes' if tournament.completed else 'No'}")
-        print("Players:")
-        for player_id in tournament.players:
-            print(f" - {player_id}")
-
-    def enter_match_results(tournament: Tournament, round_number: int, match_results: List[Optional[str]]):
-        if round_number > len(tournament.rounds) or round_number < 1:
-            print("Invalid round number.")
-            return
-    
-        round = tournament.rounds[round_number - 1]
-        for i, match in enumerate(round.matches):
-            if match_results[i] is not None:
-                match.completed = True
-                match.winner = match_results[i]
-    
-        save(tournament, Path(f"data/tournaments/{tournament.name.replace(' ', '_')}.json"))
-
-    def advance_to_next_round(tournament: Tournament):
-        if tournament.current_round is None:
-            tournament.current_round = 1
-        elif tournament.current_round < tournament.number_of_rounds:
-            tournament.current_round += 1
-        else:
-            tournament.completed = True
-    
-        save(tournament, Path(f"data/tournaments/{tournament.name.replace(' ', '_')}.json"))
-
-    def generate_tournament_report(tournament: Tournament):
-        report = f"Tournament Report: {tournament.name}\n"
-        report += f"Dates: {tournament.start_date.strftime('%d-%m-%Y')} to {tournament.end_date.strftime('%d-%m-%Y')}\n"
-        report += f"Venue: {tournament.venue}\n"
-        report += "Players:\n"
-        for player_id in tournament.players:
-            report += f" - {player_id}\n"
-        report += "Rounds:\n"
-        for i, round in enumerate(tournament.rounds):
-            report += f"  Round {i+1}:\n"
-            for match in round.matches:
-                report += f"    {match.players[0]} vs {match.players[1]} - "
-                if match.completed:
-                    report += f"Winner: {match.winner if match.winner else 'Draw'}\n"
-                else:
-                    report += "Not Completed\n"
-        print(report)"""
+        print("Type a tournament number to view its players or X to return to the main menu.")
+        value = self.input_string()
+        if value.isdigit():
+            value = int(value)
+            if value in range(1, len(self.tournaments) + 1):
+                return NoopCmd("tournament-players", tournament=self.tournaments[value - 1])
+        elif value.upper() == "X":
+            return NoopCmd("main-menu")

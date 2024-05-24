@@ -28,3 +28,11 @@ class Match:
 
     def __repr__(self):
         return f"Match({self.player1.chess_id} vs {self.player2.chess_id}, result={self.result})"
+
+    @classmethod
+    def deserialize(cls, data):
+        return cls(
+            players=data["players"],
+            completed=data["completed"],
+            winner=data.get("winner")
+        )
