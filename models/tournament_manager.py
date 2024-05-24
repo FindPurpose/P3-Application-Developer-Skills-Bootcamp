@@ -30,7 +30,7 @@ class TournamentManager:
                         # Parse rounds and matches
                         tournament.rounds = []
                         for round_data in data["rounds"]:
-                            matches = [Match(players=m["players"], completed=m["completed"], winner=m.get("winner")) for m in round_data]
+                            matches = [Match(players=m["players"], completed=m["completed"], result=m.get("result")) for m in round_data]
                             round_obj = Round(matches=matches)
                             tournament.rounds.append(round_obj)
 

@@ -12,6 +12,7 @@ class App:
         "player-edit": PlayerEdit,
         "player-create": PlayerEdit,
         "tournament-view": TournamentView,
+        "tournament-players": TournamentView,
         "exit": False,
     }
 
@@ -37,3 +38,6 @@ class App:
 if __name__ == "__main__":
     app = App()
     app.run()
+
+
+"add a file for the root of the flake8"

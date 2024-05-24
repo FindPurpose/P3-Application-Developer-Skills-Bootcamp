@@ -9,11 +9,10 @@ from .player import Player
 from typing import List, Optional
 import random
 class Match:
-    def __init__(self, player1, player2, result=None):
-        self.player1 = player1
-        self.player2 = player2
+    def __init__(self, players, completed=False,  result=None):
+        self.player1, self.player2 = players
         self.result = result 
-        self.completed = False
+        self.completed = completed
 
     def set_result(self, result):
         self.result = result
