@@ -4,9 +4,11 @@ from typing import List, Optional
 from datetime import datetime
 from models import Tournament, Match  # Assuming you have these classes defined in models.py
 
+
 def save(tournament: Tournament, path: Path):
     with path.open('w') as f:
         json.dump(tournament.serialize(), f)
+
 
 def display_tournament_info(tournament: Tournament):
     print(f"Tournament: {tournament.name}")
@@ -18,6 +20,7 @@ def display_tournament_info(tournament: Tournament):
     print("Players:")
     for player_id in tournament.players:
         print(f" - {player_id}")
+
 
 def enter_match_results(tournament: Tournament, round_number: int, match_results: List[Optional[str]]):
     if round_number > len(tournament.rounds) or round_number < 1:
@@ -32,6 +35,7 @@ def enter_match_results(tournament: Tournament, round_number: int, match_results
 
     save(tournament, Path(f"data/tournaments/{tournament.name.replace(' ', '_')}.json"))
 
+
 def advance_to_next_round(tournament: Tournament):
     if tournament.current_round is None:
         tournament.current_round = 1
@@ -41,6 +45,7 @@ def advance_to_next_round(tournament: Tournament):
         tournament.completed = True
 
     save(tournament, Path(f"data/tournaments/{tournament.name.replace(' ', '_')}.json"))
+
 
 def generate_tournament_report(tournament: Tournament):
     report = f"Tournament Report: {tournament.name}\n"

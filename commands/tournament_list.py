@@ -7,4 +7,4 @@ class TournamentListCmd(BaseCommand):
 
     def execute(self):
         tm = TournamentManager()
-        return Context("tournament-view", tournaments=tm.tournaments)
+        return Context("tournament-view", ongoing_tournaments=tm.ongoing_tournaments, completed_tournaments=tm.completed_tournaments)

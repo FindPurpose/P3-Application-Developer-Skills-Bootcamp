@@ -1,5 +1,5 @@
 from commands import ClubListCmd, TournamentListCmd
-from screens import ClubCreate, ClubView, MainMenu, PlayerEdit, PlayerView, TournamentView
+from screens import ClubCreate, ClubView, MainMenu, PlayerEdit, PlayerView, TournamentView, TournamentPlayersView, RegisterPlayerView
 
 class App:
     """The main controller for the club management program"""
@@ -12,7 +12,8 @@ class App:
         "player-edit": PlayerEdit,
         "player-create": PlayerEdit,
         "tournament-view": TournamentView,
-        "tournament-players": TournamentView,
+        "tournament-players": TournamentPlayersView,
+        "register-player": RegisterPlayerView,
         "exit": False,
     }
 
@@ -38,6 +39,3 @@ class App:
 if __name__ == "__main__":
     app = App()
     app.run()
-
-
-"add a file for the root of the flake8"
