@@ -1,7 +1,9 @@
-from ..base_screen import BaseScreen
-from commands import NoopCmd, ExitCmd
-from models.tournament_operations import TournamentOperations
+# File: screens/tournaments/player_view.py
 
+from ..base_screen import BaseScreen
+from commands import NoopCmd
+from models.tournament_operations import TournamentOperations
+from screens.tournaments.register_player_view import RegisterPlayerView
 
 class TournamentPlayersView(BaseScreen):
     def __init__(self, tournament, ongoing_tournaments, completed_tournaments):
@@ -26,7 +28,7 @@ class TournamentPlayersView(BaseScreen):
         value = self.input_string().upper()
 
         if value == "R":
-            return NoopCmd("register-player", tournament=self.tournament, ongoing_tournaments=self.ongoing_tournaments, completed_tournaments=self.completed_tournaments)
+            return RegisterPlayerView(self.tournament).run()
         elif value == "E":
             if self.tournament.current_round:
                 round_number = self.tournament.current_round
@@ -55,4 +57,3 @@ class TournamentPlayersView(BaseScreen):
         if confirmation == "Y":
             self.operations.advance_to_next_round(self.tournament)
             print("Advanced to the next round.")
-

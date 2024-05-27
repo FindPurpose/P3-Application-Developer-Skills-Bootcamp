@@ -59,3 +59,13 @@ class Player:
         # datetime is notnatively serializable in JSON
         data["birthday"] = self.birthday
         return data
+    
+    def to_dict(self):
+        return {
+            'chess_id': self.chess_id,
+            'name': self.name,
+            'email': self.email,
+            'birthday': self.birthday,
+            'points': self.points
+        }
+

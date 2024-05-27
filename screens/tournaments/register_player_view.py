@@ -1,28 +1,25 @@
 from ..base_screen import BaseScreen
-from commands import NoopCmd, ExitCmd
-from models.tournament_operations import TournamentOperations
-
+from models.player import Player
+from commands import NoopCmd
 
 class RegisterPlayerView(BaseScreen):
-    def __init__(self, tournament, tournaments, players):
+    def __init__(self, tournament):
         self.tournament = tournament
-        self.tournaments = tournaments
-        self.players = players
-        self.operations = TournamentOperations()
 
     def display(self):
-        print("Available Players:")
-        for player in self.players:
-            print(f"ID: {player.id}, Name: {player.name}")
+        print(f"Registering player for tournament: {self.tournament.name}")
+        chess_id = self.input_chess_id(prompt="Enter the player's chess ID")
+        name = self.input_string(prompt="Enter the player's name", empty=True)
+        email = self.input_email(prompt="Enter the player's email")
+        birthday = self.input_birthday(prompt="Enter the player's birthday (dd-mm-yyyy)")
+
+        new_player = Player(chess_id=chess_id, name=name, email=email, birthday=birthday)
+        self.tournament.players.append(new_player)
+        print(f"Player {name} with ID {chess_id} has been registered.")
+
+        # Save the updated tournament
+        self.tournament.save()
 
     def get_command(self):
-        player_id = self.input_string("Enter the Chess Identifier of the player to register (or X to cancel): ").upper()
-        if player_id == "X":
-            return NoopCmd("tournament-players", tournament=self.tournament, tournaments=self.tournaments)
-        for player in self.players:
-            if player_id == player.id:
-                self.operations.register_player(self.tournament, player_id)
-                print(f"Player {player.name} registered.")
-                return NoopCmd("tournament-players", tournament=self.tournament, tournaments=self.tournaments)
-        print("Player not found.")
-        return NoopCmd("register-player", tournament=self.tournament, tournaments=self.tournaments, players=self.players)
+        # After registering a player, return to the tournament players view
+        return NoopCmd("tournament-players", tournament=self.tournament)

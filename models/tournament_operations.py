@@ -1,4 +1,5 @@
 import json
+import random
 from pathlib import Path
 from datetime import datetime
 from models import Tournament, Round, Match
@@ -27,13 +28,13 @@ class TournamentOperations:
 
     def advance_to_next_round(self, tournament):
         if tournament.current_round is None:
-            tournament.current_round = 1
+            self.generate_first_round_pairings(tournament)
         elif tournament.current_round < tournament.number_of_rounds:
-            tournament.current_round += 1
+            self.generate_subsequent_round_pairings(tournament)
         else:
             tournament.completed = True
-
-        self.save(tournament)
+            self.save(tournament)
+            print("Tournament has completed.")
 
     def generate_tournament_report(self, tournament):
         report = f"Tournament Report: {tournament.name}\n"
@@ -67,3 +68,43 @@ class TournamentOperations:
         }
         with open(tournament.filepath, 'w') as file:
             json.dump(data, file, indent=4)
+
+    def generate_first_round_pairings(self, tournament):
+        players = tournament.players[:]
+        random.shuffle(players)
+        matches = []
+        for i in range(0, len(players), 2):
+            if i + 1 < len(players):
+                matches.append(Match(players[i], players[i + 1]))
+            else:
+                matches.append(Match(players[i], None))  # Handle odd number of players
+        first_round = Round(matches)
+        tournament.rounds.append(first_round)
+        tournament.current_round = 1
+        self.save(tournament)
+    
+    def generate_subsequent_round_pairings(self, tournament):
+        players = sorted(tournament.players, key=lambda x: x.points, reverse=True)
+        matches = []
+        i = 0
+        while i < len(players) - 1:
+            match = (players[i], players[i + 1])
+            if not self.has_played_before(tournament, match):
+                matches.append(Match(*match))
+                i += 2
+            else:
+                random.shuffle(players)
+                i = 0
+        new_round = Round(matches)
+        tournament.rounds.append(new_round)
+        tournament.current_round += 1
+        self.save(tournament)
+    
+    def has_played_before(self, tournament, match):
+        player1, player2 = match
+        for round in tournament.rounds:
+            for match in round.matches:
+                if (match.player1 == player1 and match.player2 == player2) or (match.player1 == player2 and match.player2 == player1):
+                    return True
+        return False
+
