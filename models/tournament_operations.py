@@ -38,18 +38,28 @@ class TournamentOperations:
 
     def generate_tournament_report(self, tournament):
         report = f"Tournament Report: {tournament.name}\n"
-        report += f"Dates: {tournament.start_date.strftime('%d-%m-%Y')} to {tournament.end_date.strftime('%d-%m-%Y')}\n"
+        report += f"Dates: {tournament.start_date.strftime('%Y-%m-%d')} to {tournament.end_date.strftime('%Y-%m-%d')}\n"
         report += f"Venue: {tournament.venue}\n"
         report += f"Number of Rounds: {tournament.number_of_rounds}\n"
         report += "Rounds:\n"
+    
         for round_num, round in enumerate(tournament.rounds, 1):
             report += f"  Round {round_num}:\n"
             for match in round.matches:
-                report += f"    Match: {match.players} - {'Completed' if match.completed else 'Incomplete'}\n"
+                report += f"    Match: {match.player1.name} vs {match.player2.name if match.player2 else 'Bye'} - {'Completed' if match.completed else 'Incomplete'}\n"
+                if match.result:
+                    report += f"      Winner: {match.result}\n"
+                elif match.completed:
+                    report += f"      Winner: {match.result.name if match.result else 'Draw'}\n"
 
+        print(report)
         return report
 
     def save(self, tournament):
+        for round in tournament.rounds:
+            for match in round.matches:
+                print(match.player1.name.replace("Player ", ""))
+                print(match.player2.name)
         data = {
             "name": tournament.name,
             "dates": {
@@ -62,7 +72,7 @@ class TournamentOperations:
             "completed": tournament.completed,
             "players": tournament.players,
             "rounds": [
-                [{"players": match.players, "completed": match.completed, "result": match.result} for match in round.matches]
+                [{"players": [match.player1.name.replace("Player ", ""), match.player2.name.replace("Player ", "")], "completed": match.completed, "result": match.result} for match in round.matches]
                 for round in tournament.rounds
             ]
         }

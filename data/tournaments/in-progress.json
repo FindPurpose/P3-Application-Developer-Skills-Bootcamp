@@ -6,7 +6,7 @@
     },
     "venue": "Cornville Town Hall",
     "number_of_rounds": 4,
-    "current_round": 3,
+    "current_round": 2,
     "completed": false,
     "players": [
         "LU33889",
@@ -26,7 +26,7 @@
                     "YJ29085"
                 ],
                 "completed": true,
-                "result": null
+                "winner": "YJ29085"
             },
             {
                 "players": [
@@ -34,7 +34,7 @@
                     "XW31336"
                 ],
                 "completed": true,
-                "result": null
+                "winner": "PB43166"
             },
             {
                 "players": [
@@ -42,7 +42,7 @@
                     "OU52460"
                 ],
                 "completed": true,
-                "result": null
+                "winner": "OU52460"
             },
             {
                 "players": [
@@ -50,7 +50,7 @@
                     "OH36083"
                 ],
                 "completed": true,
-                "result": null
+                "winner": null
             }
         ],
         [
@@ -60,7 +60,7 @@
                     "OU52460"
                 ],
                 "completed": false,
-                "result": null
+                "winner": "OU52460"
             },
             {
                 "players": [
@@ -68,23 +68,22 @@
                     "AV07547"
                 ],
                 "completed": true,
-                "result": null
+                "winner": null
             },
             {
                 "players": [
                     "OH36083",
                     "XW31336"
                 ],
-                "completed": true,
-                "result": null
+                "completed": false
             },
             {
                 "players": [
                     "LU33889",
                     "OS93227"
                 ],
-                "completed": true,
-                "result": null
+                "completed": false,
+                "winner": null
             }
         ]
     ]

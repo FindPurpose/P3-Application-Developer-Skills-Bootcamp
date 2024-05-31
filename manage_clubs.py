@@ -39,3 +39,8 @@ class App:
 if __name__ == "__main__":
     app = App()
     app.run()
+
+"""
+json gets updated
+The program must also allow the user to create a new tournament.
+"""

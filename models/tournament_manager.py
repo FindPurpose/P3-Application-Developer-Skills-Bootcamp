@@ -23,12 +23,12 @@ class TournamentManager:
                     players = [self.load_player(player_id) for player_id in data["players"]]
                     rounds = []
                     for round_data in data["rounds"]:
-                        matches = [
+                        matches = [                         
                             Match(
                                 player1=next(player for player in players if player.chess_id == m["players"][0]),
                                 player2=next(player for player in players if player.chess_id == m["players"][1]),
                                 completed=m["completed"],
-                                result=m.get("result")
+                                result=m.get("winner")
                             )
                             for m in round_data
                         ]
