@@ -1,5 +1,5 @@
 from commands import ClubListCmd, TournamentListCmd
-from screens import ClubCreate, ClubView, MainMenu, PlayerEdit, PlayerView, TournamentView, TournamentPlayersView, RegisterPlayerView
+from screens import ClubCreate, ClubView, MainMenu, PlayerEdit, PlayerView, TournamentView, TournamentPlayersView, RegisterPlayerView, CreateNewTournament
 
 class App:
     """The main controller for the club management program"""
@@ -14,6 +14,7 @@ class App:
         "tournament-view": TournamentView,
         "tournament-players": TournamentPlayersView,
         "register-player": RegisterPlayerView,
+        "tournament-create": CreateNewTournament, 
         "exit": False,
     }
 

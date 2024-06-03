@@ -22,23 +22,22 @@ class Tournament:
     def to_dict(self):
         return {
             "name": self.name,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
+            "dates": {
+                "from": self.start_date.strftime("%d-%m-%Y"),
+                "to": self.end_date.strftime("%d-%m-%Y")
+            },
             "venue": self.venue,
             "number_of_rounds": self.number_of_rounds,
             "players": [player.__dict__ for player in self.players],
             "rounds": [
-                {
-                    "matches": [
-                        {
-                            "player1": match.player1.__dict__,
-                            "player2": match.player2.__dict__,
-                            "completed": match.completed,
-                            "result": match.result
-                        }
-                        for match in round.matches
-                    ]
-                }
+                [
+                    {
+                        "players": [match.player1.chess_id, match.player2.chess_id],
+                        "completed": match.completed,
+                        "winner": match.result
+                    }
+                    for match in round.matches
+                ]
                 for round in self.rounds
             ],
             "current_round": self.current_round,
@@ -52,18 +51,22 @@ class Tournament:
         for round_data in data["rounds"]:
             matches = [
                 Match(
-                    player1=next(player for player in players if player.chess_id == m["player1"]["chess_id"]),
-                    player2=next(player for player in players if player.chess_id == m["player2"]["chess_id"]),
+                    player1=next(player for player in players if player.chess_id == m["players"][0]),
+                    player2=next(player for player in players if player.chess_id == m["players"][1]),
                     completed=m["completed"],
-                    result=m.get("result")
+                    result=m.get("winner")
                 )
-                for m in round_data["matches"]
+                for m in round_data
             ]
             rounds.append(Round(matches))
+        
+        start_date = datetime.strptime(data["dates"]["from"], "%d-%m-%Y")
+        end_date = datetime.strptime(data["dates"]["to"], "%d-%m-%Y")
+
         return cls(
             name=data["name"],
-            start_date=data["start_date"],
-            end_date=data["end_date"],
+            start_date=start_date,
+            end_date=end_date,
             venue=data["venue"],
             number_of_rounds=data["number_of_rounds"],
             filepath=filepath,
@@ -72,7 +75,6 @@ class Tournament:
             current_round=data["current_round"],
             completed=data["completed"]
         )
-    
     
     def save(self):
         if self.completed:

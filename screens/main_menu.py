@@ -1,4 +1,4 @@
-from commands import ExitCmd, NoopCmd, TournamentListCmd
+from commands import ExitCmd, NoopCmd, TournamentListCmd, CreateTournamentCmd
 from .base_screen import BaseScreen
 
 class MainMenu(BaseScreen):
@@ -14,6 +14,7 @@ class MainMenu(BaseScreen):
     def get_command(self):
         while True:
             print("Type C to create a club or a club number to view/edit it.")
+            print("Type T to create a tournament.")
             print("Type V to view/manage tournaments.")
             print("Type X to exit.")
             value = self.input_string()
@@ -23,6 +24,8 @@ class MainMenu(BaseScreen):
                     return NoopCmd("club-view", club=self.clubs[value - 1])
             elif value.upper() == "C":
                 return NoopCmd("club-create")
+            elif value.upper() == "T":  
+                return NoopCmd("tournament-create")
             elif value.upper() == "V":
                 return TournamentListCmd()
             elif value.upper() == "X":

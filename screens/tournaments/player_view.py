@@ -1,5 +1,3 @@
-# File: screens/tournaments/player_view.py
-
 from ..base_screen import BaseScreen
 from commands import NoopCmd
 from models.tournament_operations import TournamentOperations
