@@ -2,7 +2,8 @@ import json
 import random
 from pathlib import Path
 from datetime import datetime
-from models import Tournament, Round, Match
+from models import Tournament, Round, Match, Player
+from screens.tournaments.register_player_view import RegisterPlayerView
 
 class TournamentOperations:
     def __init__(self, data_folder="data/tournaments"):
@@ -21,8 +22,7 @@ class TournamentOperations:
         round = tournament.rounds[round_number - 1]
         for i, match in enumerate(round.matches):
             if match_results[i] is not None:
-                match.completed = True
-                match.winner = match_results[i]
+                match.set_result(match_results[i])  # Use set_result method to handle result setting and completed status
 
         self.save(tournament)
 
@@ -41,25 +41,24 @@ class TournamentOperations:
         report += f"Dates: {tournament.start_date.strftime('%Y-%m-%d')} to {tournament.end_date.strftime('%Y-%m-%d')}\n"
         report += f"Venue: {tournament.venue}\n"
         report += f"Number of Rounds: {tournament.number_of_rounds}\n"
+        report += "Players:\n"
+        
+        sorted_players = sorted(tournament.players, key=lambda x: x.points, reverse=True)
+        for player in sorted_players:
+            report += f"  {player.name} (ID: {player.chess_id}) - {player.points} points\n"
+        
         report += "Rounds:\n"
-    
         for round_num, round in enumerate(tournament.rounds, 1):
             report += f"  Round {round_num}:\n"
             for match in round.matches:
                 report += f"    Match: {match.player1.name} vs {match.player2.name if match.player2 else 'Bye'} - {'Completed' if match.completed else 'Incomplete'}\n"
                 if match.result:
-                    report += f"      Winner: {match.result}\n"
-                elif match.completed:
-                    report += f"      Winner: {match.result.name if match.result else 'Draw'}\n"
+                    report += f"      Winner: {match.result if match.result else 'Draw'}\n"
 
         print(report)
         return report
 
     def save(self, tournament):
-        for round in tournament.rounds:
-            for match in round.matches:
-                print(match.player1.name.replace("Player ", ""))
-                print(match.player2.name)
         data = {
             "name": tournament.name,
             "dates": {
@@ -70,15 +69,57 @@ class TournamentOperations:
             "number_of_rounds": tournament.number_of_rounds,
             "current_round": tournament.current_round,
             "completed": tournament.completed,
-            "players": tournament.players,
+            "players": [player.chess_id for player in tournament.players],
+            "finished": tournament.completed,
             "rounds": [
-                [{"players": [match.player1.name.replace("Player ", ""), match.player2.name.replace("Player ", "")], "completed": match.completed, "result": match.result} for match in round.matches]
+                [
+                    match.to_dict() for match in round.matches
+                ]
                 for round in tournament.rounds
             ]
         }
+
         with open(tournament.filepath, 'w') as file:
             json.dump(data, file, indent=4)
+    
+    def load(self, filepath):
+        with open(filepath, 'r') as file:
+            data = json.load(file)
+        
+        tournament = Tournament(
+            name=data["name"],
+            start_date=datetime.strptime(data["dates"]["from"], '%d-%m-%Y'),
+            end_date=datetime.strptime(data["dates"]["to"], '%d-%m-%Y'),
+            venue=data["venue"],
+            number_of_rounds=data["number_of_rounds"],
+        )
+        tournament.current_round = data["current_round"]
+        tournament.completed = data["completed"]
+        tournament.players = [self.get_player_by_id(player_id) for player_id in data["players"]]
+        tournament.rounds = [
+            Round([self.create_match_from_dict(match_data) for match_data in round_data])
+            for round_data in data["rounds"]
+        ]
+        
+        return tournament
+    
 
+    def create_match_from_dict(self, match_data):
+        player1 = RegisterPlayerView.search_player_by_id(match_data['players'][0])
+        player2 = RegisterPlayerView.search_player_by_id(match_data['players'][1]) if match_data['players'][1] else None
+        match = Match(player1, player2, match_data['completed'])
+        match.result = match_data['winner']
+        
+        # Update player points based on the match result
+        if match.result == player1.chess_id:
+            match.set_result('player1')
+        elif match.result == player2.chess_id:
+            match.set_result('player2')
+        elif match.result is None:
+            match.set_result('draw')
+        
+        return match
+    
     def generate_first_round_pairings(self, tournament):
         players = tournament.players[:]
         random.shuffle(players)
@@ -117,4 +158,3 @@ class TournamentOperations:
                 if (match.player1 == player1 and match.player2 == player2) or (match.player1 == player2 and match.player2 == player1):
                     return True
         return False
-

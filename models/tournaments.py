@@ -1,6 +1,6 @@
+import json
 from datetime import datetime
 from pathlib import Path
-import json
 from .player import Player
 from .match import Match
 from .round import Round
@@ -28,7 +28,9 @@ class Tournament:
             },
             "venue": self.venue,
             "number_of_rounds": self.number_of_rounds,
-            "players": [player.__dict__ for player in self.players],
+            "current_round": self.current_round,
+            "completed": self.completed,
+            "players": [player.chess_id for player in self.players],
             "rounds": [
                 [
                     {
@@ -39,9 +41,7 @@ class Tournament:
                     for match in round.matches
                 ]
                 for round in self.rounds
-            ],
-            "current_round": self.current_round,
-            "completed": self.completed
+            ]
         }
     
     @classmethod
@@ -59,10 +59,8 @@ class Tournament:
                 for m in round_data
             ]
             rounds.append(Round(matches))
-        
         start_date = datetime.strptime(data["dates"]["from"], "%d-%m-%Y")
         end_date = datetime.strptime(data["dates"]["to"], "%d-%m-%Y")
-
         return cls(
             name=data["name"],
             start_date=start_date,
@@ -77,17 +75,17 @@ class Tournament:
         )
     
     def save(self):
-        if self.completed:
-            file_path = 'data/tournaments/completed.json'
-        else:
-            file_path = 'data/tournaments/in-progress.json'
-        
-        if os.path.exists(file_path):
-            with open(file_path, 'r') as file:
+        with open(self.filepath, 'r') as file:
+            try:
                 tournaments = json.load(file)
-        else:
+            except json.JSONDecodeError:
+                tournaments = []
+
+        # Ensure tournaments is a list of dictionaries
+        if not isinstance(tournaments, list):
             tournaments = []
-        
+
+        # Update or append the tournament
         for i, tournament in enumerate(tournaments):
             if tournament['name'] == self.name:
                 tournaments[i] = self.to_dict()
@@ -95,5 +93,5 @@ class Tournament:
         else:
             tournaments.append(self.to_dict())
         
-        with open(file_path, 'w') as file:
+        with open(self.filepath, 'w') as file:
             json.dump(tournaments, file, indent=4)

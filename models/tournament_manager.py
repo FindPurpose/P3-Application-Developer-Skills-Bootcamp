@@ -4,8 +4,6 @@ from datetime import datetime
 from .tournaments import Tournament
 from models import Round, Match
 from .player import Player
-from datetime import datetime
-
 
 class TournamentManager:
     def __init__(self, data_folder="data/tournaments"):
@@ -64,6 +62,8 @@ class TournamentManager:
         filepath = self.data_folder / f"{name.replace(' ', '_').lower()}.json"
         new_tournament = Tournament(
             name=name,
+            #start_date=datetime.strptime(start_date, "%d-%m-%Y"),
+            #end_date=datetime.strptime(end_date, "%d-%m-%Y"),
             start_date=start_date,
             end_date=end_date,
             venue=venue,

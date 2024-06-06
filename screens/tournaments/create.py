@@ -16,7 +16,7 @@ class CreateNewTournament(BaseScreen):
         
         while True:
             try:
-                number_of_rounds = int(input("Enter number of rounds: "))
+                number_of_rounds = int(self.input_string("Enter number of rounds: "))
                 break
             except ValueError:
                 print("Invalid input. Please enter an integer for the number of rounds.")
