@@ -6,8 +6,8 @@ class Match:
         self.result = result
     
     def set_result(self, result):
-        if result not in (self.player1.chess_id, self.player2.chess_id, None):
-            raise ValueError(f"Result must be {self.player1.chess_id}, {self.player2.chess_id}, or 'None'.")
+        if result not in (self.player1.chess_id, self.player2.chess_id, 'draw'):
+            raise ValueError(f"Result must be {self.player1.chess_id}, {self.player2.chess_id}, or 'draw'.")
         
         self.result = result
         self.completed = True
@@ -16,16 +16,12 @@ class Match:
             self.player1.points += 1
         elif result == self.player2.chess_id:
             self.player2.points += 1
-        elif result is None:
+        elif result == 'draw':
             self.player1.points += 0.5
             self.player2.points += 0.5
 
     def to_dict(self):
-        winner = None
-        if self.result == self.player1.chess_id:
-            winner = self.player1.chess_id
-        elif self.result == self.player2.chess_id:
-            winner = self.player2.chess_id
+        winner = self.result
         return {
             'players': [self.player1.chess_id, self.player2.chess_id if self.player2 else None],
             'completed': self.completed,

@@ -1,5 +1,5 @@
 from ..base_screen import BaseScreen
-from commands import NoopCmd, ExitCmd
+from commands import NoopCmd, ClubListCmd
 
 class TournamentView(BaseScreen):
     def __init__(self, ongoing_tournaments, completed_tournaments):
@@ -23,5 +23,5 @@ class TournamentView(BaseScreen):
             elif value in range(len(self.ongoing_tournaments) + 1, len(self.ongoing_tournaments) + len(self.completed_tournaments) + 1):
                 return NoopCmd("tournament-players", tournament=self.completed_tournaments[value - len(self.ongoing_tournaments) - 1], ongoing_tournaments=self.ongoing_tournaments, completed_tournaments=self.completed_tournaments)
         elif value == "X":
-            return NoopCmd("main-menu")
+            return ClubListCmd()
         return NoopCmd("tournament-view", ongoing_tournaments=self.ongoing_tournaments, completed_tournaments=self.completed_tournaments)

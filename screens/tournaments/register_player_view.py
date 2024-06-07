@@ -4,6 +4,7 @@ from commands import NoopCmd
 import json
 from pathlib import Path
 
+
 class RegisterPlayerView(BaseScreen):
     def __init__(self, tournament, ongoing_tournaments, completed_tournaments):
         self.tournament = tournament

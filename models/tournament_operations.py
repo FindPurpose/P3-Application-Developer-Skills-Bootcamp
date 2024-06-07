@@ -5,6 +5,7 @@ from datetime import datetime
 from models import Tournament, Round, Match, Player
 from screens.tournaments.register_player_view import RegisterPlayerView
 
+
 class TournamentOperations:
     def __init__(self, data_folder="data/tournaments"):
         self.data_folder = Path(data_folder)
@@ -22,7 +23,7 @@ class TournamentOperations:
         round = tournament.rounds[round_number - 1]
         for i, match in enumerate(round.matches):
             if match_results[i] is not None:
-                match.set_result(match_results[i])  # Use set_result method to handle result setting and completed status
+                match.set_result(match_results[i]) 
 
         self.save(tournament)
 
@@ -42,7 +43,9 @@ class TournamentOperations:
         report += f"Venue: {tournament.venue}\n"
         report += f"Number of Rounds: {tournament.number_of_rounds}\n"
         report += "Players:\n"
-        
+        # for player in tournament.players:
+        #     result = player.chess_id
+        #     Match.set_result(result)
         sorted_players = sorted(tournament.players, key=lambda x: x.points, reverse=True)
         for player in sorted_players:
             report += f"  {player.name} (ID: {player.chess_id}) - {player.points} points\n"
@@ -103,20 +106,12 @@ class TournamentOperations:
         
         return tournament
     
-
     def create_match_from_dict(self, match_data):
         player1 = RegisterPlayerView.search_player_by_id(match_data['players'][0])
         player2 = RegisterPlayerView.search_player_by_id(match_data['players'][1]) if match_data['players'][1] else None
         match = Match(player1, player2, match_data['completed'])
         match.result = match_data['winner']
-        
-        # Update player points based on the match result
-        if match.result == player1.chess_id:
-            match.set_result('player1')
-        elif match.result == player2.chess_id:
-            match.set_result('player2')
-        elif match.result is None:
-            match.set_result('draw')
+        match.set_result(match.result)
         
         return match
     
