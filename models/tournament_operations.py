@@ -43,7 +43,6 @@ class TournamentOperations:
             else:
                 match.set_result(match_results[i])
 
-
         self.recalculate_points(tournament)
         self.save_tournament(tournament)
 
