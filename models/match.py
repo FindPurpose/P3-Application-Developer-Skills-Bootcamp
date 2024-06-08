@@ -1,3 +1,6 @@
+from models import Player
+
+
 class Match:
     def __init__(self, player1, player2=None, completed=False, result=None):
         self.player1 = player1

@@ -51,7 +51,7 @@ class TournamentPlayersView(BaseScreen):
         round = self.tournament.rounds[round_number - 1]
         match_results = []
         for match in round.matches:
-            result = self.input_string(f"Enter result for match {match.player1} vs {match.player2} (winner ID or 'D' for draw): ")
+            result = self.input_string(f"Enter result for match {match.player1} (ID: {match.player1.chess_id}) vs {match.player2} (ID: {match.player2.chess_id}) (winner ID or 'D' for draw): ")
             match_results.append(result if result != 'D' else None)
         self.operations.enter_match_results(self.tournament, round_number, match_results)
         print("Match results entered.")

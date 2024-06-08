@@ -25,6 +25,12 @@ class TournamentOperations:
                     players.append(player)
         return players
 
+    def get_player_by_chess_id(self, chess_id):
+        for player in self.players:
+            if player.chess_id == chess_id:
+                return player
+        return None
+
     def enter_match_results(self, tournament, round_number, match_results):
         if round_number > len(tournament.rounds) or round_number < 1:
             print("Invalid round number.")
@@ -34,6 +40,9 @@ class TournamentOperations:
         for i, match in enumerate(round.matches):
             if match_results[i] is not None:
                 match.set_result(match_results[i])
+            else:
+                match.set_result(match_results[i])
+
 
         self.recalculate_points(tournament)
         self.save_tournament(tournament)
@@ -42,9 +51,9 @@ class TournamentOperations:
         for round in tournament.rounds:
             for match in round.matches:
                 if match.completed:
-                    if match.result == match.player1:
+                    if match.result == match.player1.chess_id:
                         match.player1.points += 1
-                    elif match.result == match.player2:
+                    elif match.result == match.player2.chess_id:
                         match.player2.points += 1
                     elif match.result is None:
                         match.player1.points += 0.5
