@@ -42,9 +42,9 @@ class TournamentOperations:
         for round in tournament.rounds:
             for match in round.matches:
                 if match.completed:
-                    if match.result == match.player1.name:
+                    if match.result == match.player1:
                         match.player1.points += 1
-                    elif match.result == match.player2.name:
+                    elif match.result == match.player2:
                         match.player2.points += 1
                     elif match.result is None:
                         match.player1.points += 0.5
@@ -57,7 +57,7 @@ class TournamentOperations:
             self.generate_subsequent_round_pairings(tournament)
         else:
             tournament.completed = True
-            self.save(tournament)
+            self.save_tournament(tournament)
             print("Tournament has completed.")
 
     def generate_tournament_report(self, tournament):
@@ -119,7 +119,7 @@ class TournamentOperations:
         first_round = Round(matches)
         tournament.rounds.append(first_round)
         tournament.current_round = 1
-        self.save(tournament)
+        self.save_tournament(tournament)
 
     def generate_subsequent_round_pairings(self, tournament):
         players = sorted(tournament.players, key=lambda x: x.points, reverse=True)
@@ -136,7 +136,7 @@ class TournamentOperations:
         new_round = Round(matches)
         tournament.rounds.append(new_round)
         tournament.current_round += 1
-        self.save(tournament)
+        self.save_tournament(tournament)
 
     def has_played_before(self, tournament, match):
         player1, player2 = match
