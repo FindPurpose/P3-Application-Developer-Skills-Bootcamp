@@ -14,6 +14,8 @@ This package contains the models already defined by the application:
 * `Player` is a class that represents a chess player
 * `Club` is a class that represents a chess club (including `Player`s)
 * `ClubManager` is a manager class that allows to manage all clubs (and create new ones)
+* `Tournament` is a class that represents a Tournaments
+* `TournamentManager` is a manager class that allows to manage all tournaments (and create new ones)
 
 ### Screens
 
@@ -25,6 +27,11 @@ Each screen returns a Command instance (= the action to be carried on).
 This package contains "commands" - instances of classes that are used to perform operations from the program.
 Commands follow a *template pattern*. They **must** define the `execute` method.
 When executed, a command returns a context.
+
+### Flake8
+
+To generate a new flake8-html file type this into the terminal:
+`flake8 --format=html --htmldir=flake8_report`
 
 ### Main application
 
