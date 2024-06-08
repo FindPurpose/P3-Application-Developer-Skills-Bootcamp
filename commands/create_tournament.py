@@ -24,4 +24,5 @@ class CreateTournamentCmd(BaseCommand):
             self.venue, 
             self.number_of_rounds
         )
-        return TournamentListCmd()
+        return Context("tournament-view", ongoing_tournaments=tm.ongoing_tournaments,
+                       completed_tournaments=tm.completed_tournaments)

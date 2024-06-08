@@ -2,6 +2,7 @@ from datetime import datetime
 from ..base_screen import BaseScreen
 from commands.create_tournament import CreateTournamentCmd
 
+
 class CreateNewTournament(BaseScreen):
     """Screen displayed when creating a tournament"""
 

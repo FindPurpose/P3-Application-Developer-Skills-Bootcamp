@@ -68,4 +68,3 @@ class Player:
             'birthday': self.birthday,
             'points': self.points
         }
-
