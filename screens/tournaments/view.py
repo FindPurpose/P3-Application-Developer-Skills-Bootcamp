@@ -1,6 +1,7 @@
 from ..base_screen import BaseScreen
 from commands import NoopCmd, ClubListCmd
 
+
 class TournamentView(BaseScreen):
     def __init__(self, ongoing_tournaments, completed_tournaments):
         self.ongoing_tournaments = ongoing_tournaments

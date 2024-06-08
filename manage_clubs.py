@@ -1,5 +1,7 @@
 from commands import ClubListCmd, TournamentListCmd
-from screens import ClubCreate, ClubView, MainMenu, PlayerEdit, PlayerView, TournamentView, TournamentPlayersView, RegisterPlayerView, CreateNewTournament
+from screens import ClubCreate, ClubView, MainMenu, PlayerEdit, PlayerView
+from screens import RegisterPlayerView, CreateNewTournament, TournamentView, TournamentPlayersView
+
 
 class App:
     """The main controller for the club management program"""
@@ -14,7 +16,7 @@ class App:
         "tournament-view": TournamentView,
         "tournament-players": TournamentPlayersView,
         "register-player": RegisterPlayerView,
-        "tournament-create": CreateNewTournament, 
+        "tournament-create": CreateNewTournament,
         "exit": False,
     }
 
@@ -37,11 +39,7 @@ class App:
                 print("Bye!")
                 self.context.run = False
 
+
 if __name__ == "__main__":
     app = App()
     app.run()
-
-"""
-json gets updated
-The program must also allow the user to create a new tournament.
-"""

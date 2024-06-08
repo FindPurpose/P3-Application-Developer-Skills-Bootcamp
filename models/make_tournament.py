@@ -1,6 +1,6 @@
-import random
 from faker import Faker
 from faker.providers import BaseProvider
+
 
 class TournamentPlayerFaker:
     def __init__(self):
@@ -11,6 +11,6 @@ class TournamentPlayerFaker:
             "name": self.fake.name(),
             "email": self.fake.email(),
             "chess_id": chess_id,
-            "birthday": self.fake.date_of_birth().strftime("%d-%m-%Y")
+            "birthday": self.fake.date_of_birth(minimum_age=18, maximum_age=65).strftime("%d-%m-%Y")
         }
         return player_data

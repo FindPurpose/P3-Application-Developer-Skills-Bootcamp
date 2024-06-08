@@ -6,8 +6,10 @@ from .match import Match
 from .round import Round
 import os
 
+
 class Tournament:
-    def __init__(self, name, start_date, end_date, venue, number_of_rounds, filepath, players=None, rounds=None, current_round=0, completed=False):
+    def __init__(self, name, start_date, end_date, venue, number_of_rounds, filepath,
+                 players=None, rounds=None, current_round=0, completed=False):
         self.name = name
         self.start_date = start_date
         self.end_date = end_date
@@ -18,7 +20,7 @@ class Tournament:
         self.rounds = rounds if rounds is not None else []
         self.current_round = current_round
         self.completed = completed
-    
+
     def to_dict(self):
         return {
             "name": self.name,
@@ -43,7 +45,7 @@ class Tournament:
                 for round in self.rounds
             ]
         }
-    
+
     @classmethod
     def from_dict(cls, data, filepath):
         players = [Player(**player_data) for player_data in data["players"]]
@@ -73,7 +75,7 @@ class Tournament:
             current_round=data["current_round"],
             completed=data["completed"]
         )
-    
+
     def save(self):
         with open(self.filepath, 'r') as file:
             try:
@@ -92,6 +94,6 @@ class Tournament:
                 break
         else:
             tournaments.append(self.to_dict())
-        
+
         with open(self.filepath, 'w') as file:
             json.dump(tournaments, file, indent=4)

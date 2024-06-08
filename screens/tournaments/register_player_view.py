@@ -108,4 +108,5 @@ class RegisterPlayerView(BaseScreen):
         self.tournament.save()
 
     def get_command(self):
-        return NoopCmd("tournament-players", tournament=self.tournament, ongoing_tournaments=self.ongoing_tournaments, completed_tournaments=self.completed_tournaments)
+        return NoopCmd("tournament-players", tournament=self.tournament,
+                       ongoing_tournaments=self.ongoing_tournaments, completed_tournaments=self.completed_tournaments)

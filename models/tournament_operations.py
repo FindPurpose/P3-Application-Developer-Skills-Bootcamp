@@ -1,8 +1,8 @@
 import json
 import random
 from pathlib import Path
-from datetime import datetime
-from models import Tournament, Round, Match, Player
+from models import Round, Match, Player
+
 
 class TournamentOperations:
     def __init__(self, data_folder="data/tournaments"):
@@ -34,14 +34,11 @@ class TournamentOperations:
         for i, match in enumerate(round.matches):
             if match_results[i] is not None:
                 match.set_result(match_results[i])
-        
+
         self.recalculate_points(tournament)
         self.save_tournament(tournament)
 
     def recalculate_points(self, tournament):
-        # for player in tournament.players:
-        #     player.points = 0
-        
         for round in tournament.rounds:
             for match in round.matches:
                 if match.completed:
@@ -73,7 +70,7 @@ class TournamentOperations:
         sorted_players = sorted(tournament.players, key=lambda x: x.points, reverse=True)
         for player in sorted_players:
             report += f"  {player.name} (ID: {player.chess_id}) - {player.points} points\n"
-        
+
         report += "Rounds:\n"
         for round_num, round in enumerate(tournament.rounds, 1):
             report += f"  Round {round_num}:\n"
@@ -123,7 +120,7 @@ class TournamentOperations:
         tournament.rounds.append(first_round)
         tournament.current_round = 1
         self.save(tournament)
-    
+
     def generate_subsequent_round_pairings(self, tournament):
         players = sorted(tournament.players, key=lambda x: x.points, reverse=True)
         matches = []
@@ -140,7 +137,7 @@ class TournamentOperations:
         tournament.rounds.append(new_round)
         tournament.current_round += 1
         self.save(tournament)
-    
+
     def has_played_before(self, tournament, match):
         player1, player2 = match
         for round in tournament.rounds:
@@ -148,44 +145,3 @@ class TournamentOperations:
                 if (match.player1 == player1 and match.player2 == player2) or (match.player1 == player2 and match.player2 == player1):
                     return True
         return False
-
-    
-    # @staticmethod
-    # def update_points_from_file(filepath, players):
-    #     with open(filepath, 'r') as file:
-    #         data = json.load(file)
-
-    #     # Create a tournament object
-    #     tournament = Tournament(
-    #         name=data["name"],
-    #         start_date=datetime.strptime(data["dates"]["from"], '%d-%m-%Y'),
-    #         end_date=datetime.strptime(data["dates"]["to"], '%d-%m-%Y'),
-    #         venue=data["venue"],
-    #         number_of_rounds=data["number_of_rounds"]
-    #     )
-    #     tournament.current_round = data["current_round"]
-    #     tournament.completed = data["completed"]
-
-    #     # Create a dictionary of player objects using the provided players list
-    #     players_dict = {player.chess_id: player for player in players}
-    #     tournament.players = [players_dict[chess_id] for chess_id in data["players"]]
-
-    #     # Create round and match objects
-    #     for round_data in data['rounds']:
-    #         matches = []
-    #         for match_data in round_data:
-    #             player1 = players_dict[match_data['players'][0]]
-    #             player2 = players_dict[match_data['players'][1]] if match_data['players'][1] else None
-    #             match = Match(player1, player2, match_data['completed'], match_data['winner'])
-    #             matches.append(match)
-    #         round = Round(matches)
-    #         tournament.rounds.append(round)
-
-    #     # Recalculate points
-    #     TournamentOperations.recalculate_points(tournament)
-
-    #     # Save the updated tournament data
-    #     with open(filepath, 'w') as file:
-    #         json.dump(tournament.to_dict(), file, indent=4)
-
-    #     return tournament

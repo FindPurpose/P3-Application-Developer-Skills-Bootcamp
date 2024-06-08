@@ -1,5 +1,6 @@
-from commands import ExitCmd, NoopCmd, TournamentListCmd, CreateTournamentCmd
+from commands import ExitCmd, NoopCmd, TournamentListCmd
 from .base_screen import BaseScreen
+
 
 class MainMenu(BaseScreen):
     """Main menu screen"""
@@ -24,7 +25,7 @@ class MainMenu(BaseScreen):
                     return NoopCmd("club-view", club=self.clubs[value - 1])
             elif value.upper() == "C":
                 return NoopCmd("club-create")
-            elif value.upper() == "T":  
+            elif value.upper() == "T":
                 return NoopCmd("tournament-create")
             elif value.upper() == "V":
                 return TournamentListCmd()

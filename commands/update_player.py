@@ -1,5 +1,4 @@
 from commands.context import Context
-
 from .base import BaseCommand
 
 

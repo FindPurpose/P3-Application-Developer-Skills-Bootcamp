@@ -3,6 +3,7 @@ from commands import NoopCmd
 from models.tournament_operations import TournamentOperations
 from screens.tournaments.register_player_view import RegisterPlayerView
 
+
 class TournamentPlayersView(BaseScreen):
     def __init__(self, tournament, ongoing_tournaments, completed_tournaments):
         self.tournament = tournament

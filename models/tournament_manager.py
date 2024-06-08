@@ -4,6 +4,7 @@ from datetime import datetime
 from models import Tournament, Round, Match, Player
 from .make_tournament import TournamentPlayerFaker
 
+
 class TournamentManager:
     def __init__(self, data_folder="data/tournaments", player_data_folder="data/clubs"):
         self.data_folder = Path(data_folder)
