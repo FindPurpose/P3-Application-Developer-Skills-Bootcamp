@@ -39,8 +39,13 @@ class TournamentPlayersView(BaseScreen):
         elif value == "G":
             self.operations.generate_tournament_report(self.tournament)
         elif value == "X":
-            return NoopCmd("tournament-view", ongoing_tournaments=self.ongoing_tournaments, completed_tournaments=self.completed_tournaments)
-        return NoopCmd("tournament-players", tournament=self.tournament, ongoing_tournaments=self.ongoing_tournaments, completed_tournaments=self.completed_tournaments)
+            return NoopCmd("tournament-view",
+                           ongoing_tournaments=self.ongoing_tournaments,
+                           completed_tournaments=self.completed_tournaments)
+        return NoopCmd("tournament-players",
+                       tournament=self.tournament,
+                       ongoing_tournaments=self.ongoing_tournaments,
+                       completed_tournaments=self.completed_tournaments)
 
     def enter_match_results(self, round_number):
         round = self.tournament.rounds[round_number - 1]
